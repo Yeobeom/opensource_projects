@@ -1,4 +1,4 @@
-# **서울과학술대학교 오픈소스프로그래밍**
+# **서울과학기술대학교 오픈소스프로그래밍**
 
 ## **프로젝트 개요**
 LSTM(Long Short-Term Memory)를 이용하여 이더리움의 시간별 OHLCV(시가,최고가,최저가,종가,매매량)을 바탕으로 회귀분석(regression)을 통하여 이더리움의 가격을 예측하는 프로젝트.
@@ -14,10 +14,14 @@ LSTM(Long Short-Term Memory)를 이용하여 이더리움의 시간별 OHLCV(시
 이 프로젝트는 서울과기대 컴퓨터공학부 오픈소스-프로그래밍 기간 프로젝트 제출용으로 만들어졌습니다. 학부생 수준으로 작성되었으며, 대부분의 코드는 수업시간 강의자료에 기반하였습니다.
 때문에 정확성이 매우 떨어지며, 혹여나 이를 실제 코인 투자에 활용할 시 참고만 하시기 바랍니다.
 
-# 사용법
-ETH_LSTM.py 를 실행시 코인 거래소인 바이낸스에서 자동으로 이더리움의 OHLCV 데이터를 가져와서 데이터셋을 업데이트합니다. 그 후 데이터셋에서 필요한 데이터를 추출하여
-LSTM 기반 딥러닝을 진행한 후, 이더리움의 다음날 가격을 예측합니다.
+## 사용법
+상단 repository의 ETH_LSTM.py,binance_data_load.py,data폴더를 모두 다운받고, ETH_LSTM.py를 IDE를 이용해 실행합니다.
+바이낸스 API를 생성하는 방법은 [파이썬을 이용한 비트코인 자동매매 (개정판)](https://wikidocs.net/120385)를 참조하세요.
+API 키가 없어도 실행은 가능합니다. (다만, data폴더의 csv파일들을 업데이트 할 수 없습니다.)
 
+## 기본구조
+ETH_LSTM.py 를 실행시 코인 거래소인 바이낸스에서 자동으로 이더리움의 OHLCV 데이터를 가져와서 데이터셋을 업데이트합니다. 그 후 데이터셋에서 필요한 데이터를 추출하여
+LSTM 기반 딥러닝을 진행한 후, 이더리움의 다음날 가격을 예측합니다. (MAE 오차도 같이 제공합니다.)
 이때 ETH_LSTM.py의 t_frame를 적절히 변경하면 다음날이 아닌 12시간 뒤, 1시간 뒤 가격을 예측할 수 있습니다.
 또한 LSTM의 layer나 epoch 수를 조정할 수도 있습니다. 관련 변수들은 후술하겠습니다.
 
@@ -55,6 +59,33 @@ RANDOM_SEED = 777 # 랜덤시드 고정
 DATA_LOADER_PARAM = {'batch_size': 50, 'shuffle': False} # data loader param
 ```
 
+* LSTM layer
+```python
+class ETH_LSTM(nn.Module):
+    def __init__(self, input_size, output_size):
+        super(ETH_LSTM, self).__init__()
+        self.LSTM1 = torch.nn.LSTM(input_size, 128)
+        self.LSTM2 = torch.nn.LSTM(128,128)
+        self.fc = torch.nn.Linear(128, output_size)
+
+    def forward(self, x):
+        output, hidden = self.LSTM1(x)
+        output, hidden = self.LSTM2(output)
+        x = self.fc(output) # Use output of the last sequence
+        return x
+```
+LSTM layer는 2개의 Multi-layer를 이용하였습니다.
+
+```python
+# 1.1 normalizeData
+    data_normalizer = preprocessing.MinMaxScaler()
+    target_normalizer = preprocessing.MinMaxScaler()
+    coin_data_normalized = data_normalizer.fit_transform(coin_data)
+    coin_targets_normalized = target_normalizer.fit_transform(coin_targets)
+    #test_data_normalized = data_normalizer.fit_transform(test_data)
+```
+dataset를 skilearn의 MinMaxScalar()를 이용하여 정규화 하였습니다.
+
 ## 내용 설명
 
 ## 출력결과
@@ -69,6 +100,11 @@ MAE : 85.14462921226303
 예상 시작가: 4100.94140625, 예상 종가: 4101.60107421875
 ```
 
+## 발전방향
+LSTM RNN이 아직 부실합니다. overfitting 되었을 가능성이 높습니다. dropout layer등을 추가하여 오차를 줄여야 합니다.
+데이터셋이 과도하게 사용됩니다. 이 역시 overfitting 되었을 가능성이 높습니다. 이 프로젝트상에서는 모든 시계열데이터를
+사용하고 있는데, 이더리움은 2020년도와 2021년도의 가격의 차이가 큰 만큼 과거데이터가 미치는 영향이 작을수 있습니다.
+따라서 기간을 정하여 데이터셋을 분할하여 벡터를 형성하여야 합니다.(batch_size와는 다른 문제)
 
 ## 참고자료
 
