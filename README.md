@@ -57,11 +57,17 @@ DATA_LOADER_PARAM = {'batch_size': 50, 'shuffle': False} # data loader param
 
 ## 내용 설명
 
-## 결론
-t_frame = '1d' (즉, 하루를 기준으로)
+## 출력결과
+### t_frame = '1d' (즉, 하루를 기준으로)
   
 ![Tr_loss](./img/TrLoss.png)
 ![graph](./img/graph.png)
+
+```bash
+MAE : 85.14462921226303
+2021-12-22 09:00:00 기준:
+예상 시작가: 4100.94140625, 예상 종가: 4101.60107421875
+```
 
 
 ## 참고자료
