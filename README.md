@@ -1,14 +1,17 @@
 # **서울과학술대학교 오픈소스프로그래밍**
 
 ## **프로젝트 개요**
-LSTM(Long Short-Term Memory)를 이용하여 이더리움의 시간별 OHLCV(시가,최고가,최저가,종가,매매량)을 바탕으로 회귀분석을 통하여 이더리움의 가격을 예측한다.
+LSTM(Long Short-Term Memory)를 이용하여 이더리움의 시간별 OHLCV(시가,최고가,최저가,종가,매매량)을 바탕으로 회귀분석(regression)을 통하여 이더리움의 가격을 예측한다.
   
-## **Required Package**
+## **요구 패키지**
 * ccxt
 * torch
 * matplotlib
 * sklearn
 * numpy
+
+# 사용법
+ETH_LSTM.py 를 실행시, data
 
 # 파일별 설명
 ## binance_data_load.py
@@ -20,10 +23,10 @@ LSTM를 이용하여 딥러닝을 하는 .py파일입니다.
 * binance 관련 변수
 ```python
 # 바이낸스의 API 키 입력(없을시 '', 대신 최신 데이터 사용불가)
-api_key = "your_binance_api_key"
+api_key = ''
 
 # 바이낸스의 시크릿 키 입력(없을시 '', 대신 최신 데이터 사용불가)
-secret = "your_binance_secret_key"
+secret = ''
 
 # OHLCV의 시간 간격 (ex. '15m' -> 10시 15분 데이터, 10시 30분 데이터...)
 t_frame = '1d' # '1m','15m','30m','1h','3h','1d'
@@ -59,3 +62,5 @@ class ETH_LSTM(nn.Module):
         x = self.fc(output) # Use output of the last sequence
         return x
 ```
+
+##결론
