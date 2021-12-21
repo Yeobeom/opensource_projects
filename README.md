@@ -71,8 +71,8 @@ class ETH_LSTM(nn.Module):
         return x
 ```
 
-##결론
+## 결론
 
-##참고자료
+## 참고자료
 ### binance_data_load.py 관련
-* [위키](https://wikidocs.net/120385)
+* [파이썬을 이용한 비트코인 자동매매 (개정판)](https://wikidocs.net/120385)
