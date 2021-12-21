@@ -32,13 +32,30 @@ t_frame = '1d' # '1m','15m','30m','1h','3h','1d'
 symbol = 'ETH/USDT'
 ```
 * LSTM 관련 변수
+LSTM 관련 변수들로 적절히 변경 가능
 ```python
 EPOCH_MAX = 50 # epoch 횟수
-EPOCH_LOG = 1 # epoch 횟수별 
+EPOCH_LOG = 1 # epoch 횟수별 표시 간격
 OPTIMIZER_PARAM = {'lr': 0.01} # learning rate
 SCHEDULER_PARAM = {'step_size': 5, 'gamma': 0.5} # scheduler param
 USE_CUDA = torch.cuda.is_available() # CUDA 사용유무
 SAVE_MODEL = f'./data/ETH_LSTM._{t_frame}pt' # Make empty('') if you don't want save the model
 RANDOM_SEED = 777 # 랜덤시드 고정
 DATA_LOADER_PARAM = {'batch_size': 50, 'shuffle': False} # data loader param
+```
+
+* 내용 설명
+```python
+class ETH_LSTM(nn.Module):
+    def __init__(self, input_size, output_size):
+        super(ETH_LSTM, self).__init__()
+        self.LSTM1 = torch.nn.LSTM(input_size, 128)
+        self.LSTM2 = torch.nn.LSTM(128,128)
+        self.fc = torch.nn.Linear(128, output_size)
+
+    def forward(self, x):
+        output, hidden = self.LSTM1(x)
+        output, hidden = self.LSTM2(output)
+        x = self.fc(output) # Use output of the last sequence
+        return x
 ```
