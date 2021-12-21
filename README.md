@@ -1,7 +1,7 @@
 # **서울과학술대학교 오픈소스프로그래밍**
 
 ## **프로젝트 개요**
-LSTM(Long Short-Term Memory)를 이용하여 이더리움의 시간별 OHLCV(시가,최고가,최저가,종가,매매량)을 바탕으로 회귀분석(regression)을 통하여 이더리움의 가격을 예측한다.
+LSTM(Long Short-Term Memory)를 이용하여 이더리움의 시간별 OHLCV(시가,최고가,최저가,종가,매매량)을 바탕으로 회귀분석(regression)을 통하여 이더리움의 가격을 예측하는 프로젝트.
   
 ## **요구 패키지**
 * ccxt
@@ -74,5 +74,6 @@ class ETH_LSTM(nn.Module):
 ## 결론
 
 ## 참고자료
+
 ### binance_data_load.py 관련
 * [파이썬을 이용한 비트코인 자동매매 (개정판)](https://wikidocs.net/120385)
