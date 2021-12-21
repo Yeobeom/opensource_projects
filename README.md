@@ -55,21 +55,7 @@ RANDOM_SEED = 777 # 랜덤시드 고정
 DATA_LOADER_PARAM = {'batch_size': 50, 'shuffle': False} # data loader param
 ```
 
-* 내용 설명
-```python
-class ETH_LSTM(nn.Module):
-    def __init__(self, input_size, output_size):
-        super(ETH_LSTM, self).__init__()
-        self.LSTM1 = torch.nn.LSTM(input_size, 128)
-        self.LSTM2 = torch.nn.LSTM(128,128)
-        self.fc = torch.nn.Linear(128, output_size)
-
-    def forward(self, x):
-        output, hidden = self.LSTM1(x)
-        output, hidden = self.LSTM2(output)
-        x = self.fc(output) # Use output of the last sequence
-        return x
-```
+## 내용 설명
 
 ## 결론
 
@@ -77,3 +63,7 @@ class ETH_LSTM(nn.Module):
 
 ### binance_data_load.py 관련
 * [파이썬을 이용한 비트코인 자동매매 (개정판)](https://wikidocs.net/120385)
+### ## ETH_LSTM.py 관련
+* 오픈소스프로그래밍 강의자료 (DL.pdf) [관련 Github](https://github.com/mint-lab/dl_tutorial)
+* [위대한 개스피 채널](https://www.youtube.com/watch?v=9haME49Rx_0)[관련 Colab](https://colab.research.google.com/drive/149QFMKdMu9iSQoD6MaQ7ON5sncHzdH3x?usp=sharing#scrollTo=asdN_HvQfTpw)
+
