@@ -58,6 +58,8 @@ DATA_LOADER_PARAM = {'batch_size': 50, 'shuffle': False} # data loader param
 ## 내용 설명
 
 ## 결론
+![ex_screenshot](./img/.png)
+
 
 ## 참고자료
 
