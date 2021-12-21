@@ -59,6 +59,7 @@ DATA_LOADER_PARAM = {'batch_size': 50, 'shuffle': False} # data loader param
 
 ## 결론
 t_frame = '1d' (즉, 하루를 기준으로)
+  
 ![Tr_loss](./img/TrLoss.png)
 ![graph](./img/graph.png)
 
