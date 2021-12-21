@@ -16,18 +16,31 @@ LSTM(Long Short-Term Memory)를 이용하여 이더리움의 시간별 OHLCV(시
 
 ## 사용법
 상단 repository의 ETH_LSTM.py,binance_data_load.py,data폴더를 모두 다운받고, ETH_LSTM.py를 IDE를 이용해 실행합니다.
+  
 바이낸스 API를 생성하는 방법은 [파이썬을 이용한 비트코인 자동매매 (개정판)](https://wikidocs.net/120385)를 참조하세요.
 API 키가 없어도 실행은 가능합니다. (다만, data폴더의 csv파일들을 업데이트 할 수 없습니다.)
 
 ## 기본구조
 ETH_LSTM.py 를 실행시 코인 거래소인 바이낸스에서 자동으로 이더리움의 OHLCV 데이터를 가져와서 데이터셋을 업데이트합니다. 그 후 데이터셋에서 필요한 데이터를 추출하여
 LSTM 기반 딥러닝을 진행한 후, 이더리움의 다음날 가격을 예측합니다. (MAE 오차도 같이 제공합니다.)
+  
 이때 ETH_LSTM.py의 t_frame를 적절히 변경하면 다음날이 아닌 12시간 뒤, 1시간 뒤 가격을 예측할 수 있습니다.
 또한 LSTM의 layer나 epoch 수를 조정할 수도 있습니다. 관련 변수들은 후술하겠습니다.
 
 # 파일별 설명
 ## binance_data_load.py
 binance API를 이용하여 이더리움의 OHLCV 데이터를 가져와 csv파일로 저장하거나, 데이터를 가져오는 클래스인 binance_data 가 존재하는 .py파일입니다.
+```python
+import binance_data_load as BDL
+
+bdl = BDL.binance_data(api_key,secret,symbol,t_frame) # binance_data 객체 생성
+bdl.updating_coin_csv() # csv 파일 업데이트 함수
+
+coindata = bdl.Load_Coin_Data() # ohlcv 데이터 로드 함수
+coindata.data # ohlcv 데이터
+coindata.targets # 미래 시가 종가 데이터
+```
+
 
 ## ETH_LSTM.py
 LSTM를 이용하여 딥러닝을 하는 .py파일입니다.
@@ -74,7 +87,7 @@ class ETH_LSTM(nn.Module):
         x = self.fc(output) # Use output of the last sequence
         return x
 ```
-LSTM layer는 2개의 Multi-layer를 이용하였습니다.
+LSTM layer는 기본적으로 2개의 Multi-layer를 이용하였습니다. pytorch를 이용해 레이어를 수정할 수 있습니다.
 
 ```python
 # 1.1 normalizeData
@@ -85,8 +98,6 @@ LSTM layer는 2개의 Multi-layer를 이용하였습니다.
     #test_data_normalized = data_normalizer.fit_transform(test_data)
 ```
 dataset를 skilearn의 MinMaxScalar()를 이용하여 정규화 하였습니다.
-
-## 내용 설명
 
 ## 출력결과
 ### t_frame = '1d' (즉, 하루를 기준으로)
